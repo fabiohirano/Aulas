@@ -3,8 +3,19 @@ import random
 lista_de_palavras = ["abacaxi", "banana"]
 indice = random.randint(0, len(lista_de_palavras) - 1)
 adivinhou = False
+tentativas = 2
+palavra_acumulada = ""
+
+for i in range (len(lista_de_palavras[indice])):
+	palavra_acumulada = palavra_acumulada + "?"
 
 while not adivinhou:
+	
+	if tentativas == 0:
+		print("Seu ruim!")
+		break
+
+	print(palavra_acumulada)	
 	print("Digite uma letra:")
 	letra = input()
 
@@ -12,10 +23,10 @@ while not adivinhou:
 	print ("-----")
 	for i in range (len(lista_de_palavras[indice])):
 		if letra == lista_de_palavras[indice][i]:
-			print(letra)
 			contagem = contagem + 1
-		else:
-			print("?")
+			
+	if contagem == 0:
+		tentativas = tentativas - 1
 		
 	print ("A palavra tem " + str(contagem) + " letras " + letra)
 	
