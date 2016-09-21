@@ -1,3 +1,8 @@
+TAMANHO_BOLA = 20
+VEL_JOGADOR = 5
+ALTURA_JOGADOR = 100
+LARGURA_JOGADOR = 10
+
 def setup():
     global bolaX
     global bolaY
@@ -23,8 +28,8 @@ def draw():
 def desenha_jogador():
     global j1Y, j2Y
     fill(255, 255, 255)
-    rect(10, j1Y - 50, 10, 50)
-    rect(width - 20, j2Y - 50, 10, 50)
+    rect(10, j1Y - (ALTURA_JOGADOR/2), LARGURA_JOGADOR, ALTURA_JOGADOR)
+    rect(width - 20, j2Y - (ALTURA_JOGADOR/2), LARGURA_JOGADOR, ALTURA_JOGADOR)
 
 def keyPressed():
     global sobe1, desce1
@@ -55,23 +60,34 @@ def move_jogador():
     global j1Y, sobe1, desce1
     global j2Y, sobe2, desce2
     if sobe1:
-        j1Y = j1Y - 5
+        if j1Y  - (ALTURA_JOGADOR/2) > 0:
+            j1Y = j1Y - VEL_JOGADOR
     if desce1:
-        j1Y = j1Y + 5
+        if j1Y + (ALTURA_JOGADOR/2) < height:
+            j1Y = j1Y + VEL_JOGADOR
     if sobe2:
-        j2Y = j2Y - 5
+        if j2Y - (ALTURA_JOGADOR/2) > 0:
+            j2Y = j2Y - VEL_JOGADOR
     if desce2:
-        j2Y = j2Y + 5
+        if j2Y + (ALTURA_JOGADOR/2) < height:
+            j2Y = j2Y + VEL_JOGADOR
 
 def desenha_bola():
     fill (random(255), random(255), random(255))
-    ellipse(bolaX, bolaY, 20, 20)
+    ellipse(bolaX, bolaY, TAMANHO_BOLA, TAMANHO_BOLA)
 
 def move_bola():
     global bolaX, bolaY, velX, velY
     bolaX = bolaX + velX
     bolaY = bolaY + velY
-    if bolaX < 0 or bolaX > width:
-        velX = -velX
+    if bolaX < 10 + LARGURA_JOGADOR or bolaX > width-10-LARGURA_JOGADOR:
+        if rebate(1) or rebate(2):
+            velX = -velX
     if bolaY < 0 or bolaY > height:
         velY = -velY
+        
+def rebate(numero_jogador):
+    if numero_jogador == 1:
+        return (bolaX <= 10 + LARGURA_JOGADOR and j1Y - (ALTURA_JOGADOR/2) < bolaY < j1Y + (ALTURA_JOGADOR/2))
+    else:
+        return (bolaX >= width - 10 - LARGURA_JOGADOR and j2Y - (ALTURA_JOGADOR/2) < bolaY < j2Y + (ALTURA_JOGADOR/2))
