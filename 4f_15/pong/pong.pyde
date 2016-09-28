@@ -1,6 +1,6 @@
 TAMANHO_BOLA = 20
 VEL_JOGADOR = 5
-ALTURA_JOGADOR = 100
+ALTURA_JOGADOR = 70
 LARGURA_JOGADOR = 10
 
 def setup():
@@ -9,12 +9,14 @@ def setup():
     global velX, velY
     global j1Y, j2Y
     global sobe1, desce1, sobe2, desce2
+    global cresce1, cresce2
     j1Y = height/2
     j2Y = height/2
     bolaX, bolaY = 90, 333
     velX, velY = 1, 2
     sobe1, desce1 = False, False
     sobe2, desce2 = False, False
+    cresce1, cresce2 = False, False
     size(600, 400)
 
 def draw():
@@ -26,14 +28,21 @@ def draw():
     desenha_jogador()
     
 def desenha_jogador():
+    global cresce1, cresce2
     global j1Y, j2Y
     fill(255, 255, 255)
-    rect(10, j1Y - (ALTURA_JOGADOR/2), LARGURA_JOGADOR, ALTURA_JOGADOR)
-    rect(width - 20, j2Y - (ALTURA_JOGADOR/2), LARGURA_JOGADOR, ALTURA_JOGADOR)
+    a, b = 1, 1
+    if cresce1:
+        a += 1
+    if cresce2:
+        b += 1
+    rect(10, j1Y - (a * ALTURA_JOGADOR/2), LARGURA_JOGADOR, a * ALTURA_JOGADOR)
+    rect(width - 20, j2Y - (b * ALTURA_JOGADOR/2), LARGURA_JOGADOR, b * ALTURA_JOGADOR)
 
 def keyPressed():
     global sobe1, desce1
     global sobe2, desce2
+    global cresce1, cresce2
     if key == 'w':
         sobe1 = True
     if key == 's':
@@ -42,11 +51,16 @@ def keyPressed():
         sobe2 = True
     if key == 'l':
         desce2 = True
-
+    if key == 'd':
+        cresce1 = True
+    if key == 'k':
+        cresce2 = True        
 
 def keyReleased():
     global sobe1, desce1
     global sobe2, desce2
+    global cresce1, cresce2
+    
     if key == 'w':
         sobe1 = False
     if key == 's':
@@ -54,7 +68,12 @@ def keyReleased():
     if key == 'o':
         sobe2 = False
     if key == 'l':
-        desce2 = False 
+        desce2 = False
+    if key == 'd':
+        cresce1 = False
+    if key == 'k':
+        cresce2 = False       
+
 
 def move_jogador():
     global j1Y, sobe1, desce1
@@ -82,12 +101,22 @@ def move_bola():
     bolaY = bolaY + velY
     if bolaX < 10 + LARGURA_JOGADOR or bolaX > width-10-LARGURA_JOGADOR:
         if rebate(1) or rebate(2):
-            velX = -velX
+            velX = - (1.06) * velX
+            velY = (1.06) * velY
+        else: # Não rebateu, ou seja, morreu
+             bolaX = width/2
+             bolaY = height/2            
     if bolaY < 0 or bolaY > height:
         velY = -velY
         
 def rebate(numero_jogador):
+    global cresce1, cresce2
+    a, b = 1, 1
+    if cresce1:
+        a += 1
+    if cresce2:
+        b += 1
     if numero_jogador == 1:
-        return (bolaX <= 10 + LARGURA_JOGADOR and j1Y - (ALTURA_JOGADOR/2) < bolaY < j1Y + (ALTURA_JOGADOR/2))
+        return (bolaX <= 10 + LARGURA_JOGADOR and j1Y - (a * ALTURA_JOGADOR/2) < bolaY < j1Y + (a * ALTURA_JOGADOR/2))
     else:
-        return (bolaX >= width - 10 - LARGURA_JOGADOR and j2Y - (ALTURA_JOGADOR/2) < bolaY < j2Y + (ALTURA_JOGADOR/2))
+        return (bolaX >= width - 10 - LARGURA_JOGADOR and j2Y - (b * ALTURA_JOGADOR/2) < bolaY < j2Y + (b * ALTURA_JOGADOR/2))
