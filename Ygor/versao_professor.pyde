@@ -7,6 +7,10 @@ global tamanhoRaquete
 global espessuraRaquete
 global tamanhoBola
 global forcaRaquete
+global velocidadeMuro
+global espessuraMuro
+global alturaMuro
+global muroX, muroY
 forcaRaquete = 20
 tamanhoRaquete = 100
 espessuraRaquete = 15
@@ -15,6 +19,10 @@ resistencia = 0.01
 gravidade = 1
 velX, velY = 2, 0
 bolaX, bolaY = 200, 50
+velocidadeMuro = 3
+espessuraMuro = 30
+alturaMuro = 20
+muroX, muroY = 0, 0
 
 def setup():
     global numeroDeTela
@@ -51,6 +59,34 @@ def joga():
     quica(width, 0)
     quica(0, 0)
     bateRaquete()
+    muro()
+
+def muro():
+    desenhaMuro()
+    if muroX <= 0:
+        reiniciaMuro()
+    else:
+        moveMuro()
+        bateMuro()
+
+def desenhaMuro():
+    rectMode(CENTER)
+    fill (255)
+    rect (muroX, muroY, alturaMuro, espessuraMuro)
+
+def bateMuro():
+    pass
+
+def reiniciaMuro():
+    global muroX, muroY
+    global alturaMuro
+    alturaMuro = random(20, height - 50)
+    muroX = width
+    muroY = alturaMuro/2
+    
+def moveMuro():
+    global muroX
+    muroX -= velocidadeMuro
     
 def bateRaquete():
     global bolaY, velY
@@ -69,7 +105,7 @@ def desenhaRaquete():
     rect(mouseX, mouseY, tamanhoRaquete, espessuraRaquete)
     
 def desenhaBola():
-    fill (255, 255, 255)
+    fill (255, 0, 255)
     ellipse(bolaX, bolaY, tamanhoBola, tamanhoBola)    
 
 def cai():
