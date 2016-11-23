@@ -11,6 +11,7 @@ global velocidadeMuro
 global espessuraMuro
 global alturaMuro
 global muroX, muroY
+
 forcaRaquete = 20
 tamanhoRaquete = 100
 espessuraRaquete = 15
@@ -19,8 +20,8 @@ resistencia = 0.01
 gravidade = 1
 velX, velY = 2, 0
 bolaX, bolaY = 200, 50
-velocidadeMuro = 3
-espessuraMuro = 30
+velocidadeMuro = 5
+espessuraMuro = 100
 alturaMuro = 20
 muroX, muroY = 0, 0
 
@@ -71,8 +72,8 @@ def muro():
 
 def desenhaMuro():
     rectMode(CENTER)
-    fill (255)
-    rect (muroX, muroY, alturaMuro, espessuraMuro)
+    fill (255,69,0)
+    rect (muroX, height - muroY, espessuraMuro, alturaMuro)
 
 def bateMuro():
     pass
@@ -80,7 +81,7 @@ def bateMuro():
 def reiniciaMuro():
     global muroX, muroY
     global alturaMuro
-    alturaMuro = random(20, height - 50)
+    alturaMuro = random(20, height - 100)
     muroX = width
     muroY = alturaMuro/2
     
@@ -89,15 +90,16 @@ def moveMuro():
     muroX -= velocidadeMuro
     
 def bateRaquete():
-    global bolaY, velY
+    global bolaY, velY, velX
     overhead = mouseY - pmouseY
     if ((bolaX + (tamanhoBola/2) > (mouseX - tamanhoRaquete/2)) and
             (bolaX - (tamanhoBola/2) < (mouseX + tamanhoRaquete/2))):
         if ((dist(bolaX, bolaY, bolaX, mouseY) <= (tamanhoBola/2) + abs(overhead))):
                 quica(mouseY, 1)
+                velX = (bolaX - mouseX)/5
                 if overhead < 0:
                     bolaY += overhead
-                    velY += overhead       
+                    velY += overhead/4    
     
 def desenhaRaquete():
     fill (255)
