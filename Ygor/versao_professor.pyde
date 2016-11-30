@@ -76,7 +76,15 @@ def desenhaMuro():
     rect (muroX, height - muroY, espessuraMuro, alturaMuro)
 
 def bateMuro():
-    pass
+    if (((bolaX - tamanhoBola/2) < muroX + espessuraMuro/2) and
+            ((bolaX + tamanhoBola/2) > muroX - espessuraMuro/2)):
+        if (dist(bolaX, bolaY, bolaX, height -  2 * muroY) <= (tamanhoBola/2)):
+            quica(height - (2 * muroY), 1)
+    if ((bolaY + tamanhoBola/2) > height -  2 * muroY):
+        if (dist(bolaX, bolaY, muroX - espessuraMuro/2, bolaY) <= (tamanhoBola/2)):
+            quica(muroX - espessuraMuro/2, 0)
+        if (dist(bolaX, bolaY, muroX + espessuraMuro/2, bolaY) <= (tamanhoBola/2)):
+            quica(muroX + espessuraMuro/2, 0)
 
 def reiniciaMuro():
     global muroX, muroY
@@ -137,7 +145,10 @@ def quica(onde, direcao):
             if bolaX > width:
                 bolaX = width
                 velX = (-(1 - resistencia)) * velX
-        if onde == 0:
+        elif onde == 0:
             if bolaX < 0:
                 bolaX = 0
                 velX = (-(1 - resistencia)) * velX
+        else:
+            bolaX = onde
+            velX = (-(1 - resistencia)) * velX
