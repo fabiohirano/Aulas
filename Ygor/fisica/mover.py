@@ -1,9 +1,3 @@
-# The Nature of Code
-# Daniel Shiffman
-# http://natureofcode.com
-# 
-# Python port: Abhik Pal
-
 class Mover(object):
     def __init__(self, m, x, y):
         self.position = PVector(x, y)
@@ -34,8 +28,28 @@ class Mover(object):
     
     def checkEdges(self):
         # Bounce off the bottom of the window.
-        if (self.position.y > height):
-            self.position.y = height
+        if (self.position.y > height - self.mass*16/2):
+            self.position.y = height - self.mass*8
 
             # A little dampening when hitting the bottom
             self.velocity.y *= -0.9
+            
+def setup():
+    size(500, 500)
+    global objetos
+    objetos = []
+    for i in range(20):
+        objetos.append(Mover(random(1, 5), width/2, 0))
+        
+def draw():
+    background(255)
+    
+    for m in objetos:
+        gravidade = PVector(0, 0.1 * m.mass)
+        vento = PVector(0.1, 0)
+        m.applyForce(gravidade)
+        m.applyForce(vento)
+        
+        m.update()
+        m.display()
+        m.checkEdges()
